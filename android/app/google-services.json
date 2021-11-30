@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "327204192169",
+    "project_id": "d-print-caae5",
+    "storage_bucket": "d-print-caae5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:327204192169:android:e744c7b9b46c2d71ebceb8",
+        "android_client_info": {
+          "package_name": "com.example.print_shop"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "327204192169-e1u49tdfbv6cc65tqmtr59s3vg7lb8ol.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.print_shop",
+            "certificate_hash": "e74b1916ab6d18a87bb3256bb6fe52956262e52b"
+          }
+        },
+        {
+          "client_id": "327204192169-idfd6qfervpslvhg6jbqaonrsg5v3j59.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBCHmevz-9xAxv5wZiE5_rEL329RsTvyY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "327204192169-idfd6qfervpslvhg6jbqaonrsg5v3j59.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
