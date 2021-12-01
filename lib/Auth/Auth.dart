@@ -10,10 +10,20 @@ class AuthService{
   Stream<User> get user {
     return _auth.authStateChanges();
   }
+
+  Future<void> reloadUser()async{
+    return await _auth.currentUser.reload();
+  }
+
   // Register with Email
   Future<AuthUser> registerWithEmailAndPassword(String email,String password)async{
       try{
         UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
+
+        print(result.user);
+        print("%"*20);
+        if(!result.user.emailVerified)
+          result.user.sendEmailVerification();
         return AuthUser(result.user,"");
       }catch(e){
         return AuthUser(null,e.toString());

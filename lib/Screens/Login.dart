@@ -22,7 +22,7 @@ class _LoginState extends State<Login> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
   int page = 0;
-  String phoneNo = "";
+  String email = "";
   String password = "";
   bool loading = false;
   bool showLoading = false;
@@ -65,7 +65,7 @@ class _LoginState extends State<Login> {
                             child: Column(
                               children: <Widget>[
                                 SizedBox(
-                                  height: 10,
+                                  height: 20,
                                 ),
                                 Container(
                                   height: _height / 4,
@@ -150,7 +150,7 @@ class _LoginState extends State<Login> {
                                               ? LightTheme.darkGray
                                               : Colors.white70,
                                           fontSize: 14),
-                                      keyboardType: TextInputType.phone,
+                                      keyboardType: TextInputType.emailAddress,
                                       decoration: InputDecoration(
                                         contentPadding: EdgeInsets.symmetric(
                                             vertical: 10.0, horizontal: 10.0),
@@ -162,7 +162,7 @@ class _LoginState extends State<Login> {
                                         icon: Container(
                                           padding: EdgeInsets.fromLTRB(0, 6, 0, 0),
                                           child: Icon(
-                                            Icons.phone,
+                                            Icons.mail_outline,
                                             color: lightTheme.value
                                                 ? LightTheme.darkGray
                                                 : Colors.white70,
@@ -179,12 +179,12 @@ class _LoginState extends State<Login> {
                                         filled: false,
                                       ),
                                       validator: (val) => val.isEmpty
-                                          ? "Enter a valid phone number"
+                                          ? "Enter a valid email"
                                           : null,
                                       onChanged: ((val) {
                                         setState(() {
-                                          phoneNo = val;
-                                          return phoneNo;
+                                          email = val;
+                                          return email;
                                         });
                                       }),
                                     ),
@@ -283,7 +283,7 @@ class _LoginState extends State<Login> {
                                       if (_formKey.currentState.validate()) {
                                         dynamic result =
                                             await _auth.loginWithEmailAndPassword(
-                                                phoneNo, password);
+                                               email, password);
                                         if (result.user == null) {
                                           setState(() {
                                             showLoading  = false;
@@ -412,8 +412,6 @@ class _LoginState extends State<Login> {
                                       showLoading = true;
                                     });
                                     var res = await _auth.loginWithGoogle();
-                                    print(res.user);
-                                    print("%"*20);
                                     setState(() {
                                       showLoading  = false;
                                     });
