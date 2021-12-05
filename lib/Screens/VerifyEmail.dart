@@ -67,11 +67,12 @@ class _VerifyEmailState extends State<VerifyEmail> {
                               showLoading = true;
                             });
                             await AuthService().reloadUser();
-                            setState(() {
-                              showLoading = false;
-                            });
-                            if(snapshot.hasData && snapshot.data.emailVerified)
-                              return Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){return Home(authUser: AuthUser(snapshot.data,""));}));
+                            if(!(snapshot.hasData && snapshot.data.emailVerified)) {
+                              setState(() {
+                                showLoading = false;
+                              });
+                            }
+                            return Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){return Home(authUser: AuthUser(user:snapshot.data,error:"",role:""));}));
                           },
                           child: Center(
                             child: Text(

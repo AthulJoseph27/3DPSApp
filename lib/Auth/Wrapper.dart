@@ -24,10 +24,9 @@ class _WrapperState extends State<Wrapper> {
       stream: AuthService().user,
       builder: (context, user){
         if(user.hasData) {
-          print(user.data);
         if(!user.data.emailVerified)
           return VerifyEmail();
-          return Home(authUser: AuthUser(user.data,""));
+          return Home(authUser: AuthUser(user:user.data,role:"",error:""));
         }
         else {
           if(hasAccount)

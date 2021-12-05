@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:print_shop/Database/Database.dart';
 
+import '../Globals.dart';
 import 'AuthUser.dart';
 
 class AuthService{
@@ -19,14 +21,13 @@ class AuthService{
   Future<AuthUser> registerWithEmailAndPassword(String email,String password)async{
       try{
         UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
-
-        print(result.user);
-        print("%"*20);
         if(!result.user.emailVerified)
           result.user.sendEmailVerification();
-        return AuthUser(result.user,"");
+
+        Database(uid:result.user.uid).insertUser(result.user.email, "Customer");
+        return AuthUser(user:result.user,role:CUSTOMER,error:"");
       }catch(e){
-        return AuthUser(null,e.toString());
+        return AuthUser(user:null,role:"",error:e.toString());
       }
     }
 
@@ -44,9 +45,15 @@ class AuthService{
       );
 
       UserCredential result = await _auth.signInWithCredential(credentials);
-      return AuthUser(result.user, "");
+      String role = CUSTOMER;
+      bool alreadyRegistered = await Database(uid:result.user.uid).alreadyRegistered();
+      if(alreadyRegistered)
+        role = (await Database(uid: result.user.uid).getUser()).role;
+      else
+        Database(uid:result.user.uid).insertUser(result.user.email, role);
+      return AuthUser(user:result.user,role:role,error:"");
     }catch(e){
-      return AuthUser(null,e.toString());
+      return AuthUser(user:null,role:"",error:e.toString());
     }
   }
 
@@ -54,10 +61,15 @@ class AuthService{
   Future<AuthUser> loginWithEmailAndPassword(String email,String password) async {
     try{
       UserCredential result = await _auth.signInWithEmailAndPassword(email: email, password: password);
-      return AuthUser(result.user,"");
+      String role = (await Database(uid: result.user.uid).getUser()).role;
+      return AuthUser(user:result.user,role:role,error:"");
     }catch(e){
-      return AuthUser(null,e.toString());
+      return AuthUser(user:null,role:"",error:e.toString());
     }
   }
+
   // Logout
+  Future<void> logout()async {
+    return await _auth.signOut();
+  }
 }
