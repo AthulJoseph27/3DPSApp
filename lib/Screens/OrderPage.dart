@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:print_shop/Screens/FileEditPage.dart';
 import 'package:print_shop/Screens/FileViewer.dart';
 import 'dart:io';
 
@@ -14,7 +16,7 @@ class OrderPage extends StatefulWidget {
 }
 
 class _OrderPageState extends State<OrderPage> {
-  static List<String> filePaths = [];
+  static List<Map<String,dynamic>> fileData = [];
   static double estimate = double.negativeInfinity;
   final ScrollController _scrollController = ScrollController();
   final FocusNode _focusNode = FocusNode();
@@ -23,15 +25,17 @@ class _OrderPageState extends State<OrderPage> {
 
   List<Widget> getFileViews() {
     List<Widget> w = [];
-
-    for (int i = 0; i < 5; i++) {
-      w.add(FileViewer(
-        fileName: 'Cubix$i.stl',
-        fileType: 'STL',
-        size: '50 B',
+    for (int i = 0; i < fileData.length; i++) {
+      w.add(
+        FileViewer(
+              fileName: fileData[i]['fileName'],
+              fileType: fileData[i]['fileType'],
+              size: fileData[i]['fileSize'],
+              count: fileData[i]['fileCount'],
       ));
     }
-
+    
+    w.add(SizedBox(height: 10,));
     return w;
   }
 
@@ -44,6 +48,18 @@ class _OrderPageState extends State<OrderPage> {
             height: 20,
           ),
           ListTile(
+            trailing: IconButton(
+              onPressed: ()async{
+                fileData = await Navigator.push(context, MaterialPageRoute(builder: (context){
+                  return FileEditPage(fileData: fileData,);
+                }));
+                setState(() {
+                });
+              },
+              icon: Icon(
+                fileData.length == 0 ? Icons.add : Icons.edit
+              ),
+            ),
             title: Text('3D Files : ',
                 style: TextStyle(
                     color: lightTheme.value
@@ -64,7 +80,7 @@ class _OrderPageState extends State<OrderPage> {
                           ? LightTheme.darkGray.withOpacity(0.7)
                           : Colors.grey.withOpacity(0.7))),
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-              child: filePaths.isEmpty
+              child: fileData.isEmpty
                   ? Container(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 0, vertical: 20),

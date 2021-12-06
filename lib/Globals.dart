@@ -1,4 +1,36 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 
 final ValueNotifier<bool>lightTheme = ValueNotifier<bool>(true);
 const String CUSTOMER = "Customer";
+
+int min(int a, int b){
+  if(a<b)
+    return a;
+  return b;
+}
+
+int max(int a, int b){
+  if(a>b)
+    return a;
+  return b;
+}
+
+class LimitRangeTextInputFormatter extends TextInputFormatter {
+  LimitRangeTextInputFormatter(this.min, this.max) : assert(min < max);
+
+  final int min;
+  final int max;
+
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    var value = int.parse(newValue.text);
+    if (value < min) {
+      return TextEditingValue(text: min.toString());
+    } else if (value > max) {
+      return TextEditingValue(text: max.toString());
+    }
+    return newValue;
+  }
+}
